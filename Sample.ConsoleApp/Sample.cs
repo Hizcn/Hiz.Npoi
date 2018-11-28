@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Hiz.Extended.Npoi;
+using Hiz.Npoi;
 using NPOI.SS.UserModel;
 using System.IO;
 

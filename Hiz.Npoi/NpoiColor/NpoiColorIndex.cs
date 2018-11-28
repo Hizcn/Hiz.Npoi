@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Hiz.Extended.Npoi
+namespace Hiz.Npoi
 {
     //TODO: 颜色: 表示不作修改的值; 表示恢复默认的值; 表示清除属性的值;
 

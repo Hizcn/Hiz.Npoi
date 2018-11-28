@@ -13,7 +13,7 @@ using System.Linq.Expressions;
 using System.Globalization;
 using NPOI.SS;
 
-namespace Hiz.Extended.Npoi
+namespace Hiz.Npoi
 {
     /* v1.2 2018-11-26
      * 增加 NpoiColor 以及相关扩展方法;

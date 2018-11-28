@@ -7,7 +7,7 @@ using System.Text;
 using System.Linq.Expressions;
 using NPOI.HSSF.Model;
 
-namespace Hiz.Extended.Npoi
+namespace Hiz.Npoi
 {
     static class NpoiReflection
     {

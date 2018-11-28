@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Hiz.Extended.Npoi
+namespace Hiz.Npoi
 {
     /* 模板设计思路
      * 

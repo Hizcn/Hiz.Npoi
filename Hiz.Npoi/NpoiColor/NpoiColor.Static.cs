@@ -10,7 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Hiz.Extended.Npoi
+namespace Hiz.Npoi
 {
     partial class NpoiColor
     {

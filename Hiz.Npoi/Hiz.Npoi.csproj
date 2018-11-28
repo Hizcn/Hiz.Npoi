@@ -4,7 +4,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\others\Hiz.Open.pfx</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
-    <Version>0.3.1</Version>
+    <Version>0.3.2</Version>
     <Authors>Hiz</Authors>
     <Description>Npoi Extensions</Description>
     <Copyright>Copyright © Hiz 2018</Copyright>

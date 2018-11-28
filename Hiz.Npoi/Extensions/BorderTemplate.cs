@@ -5,7 +5,7 @@ using System.Text;
 
 using NPOI.SS.UserModel;
 
-namespace Hiz.Extended.Npoi
+namespace Hiz.Npoi
 {
     /// <summary>
     /// 边框批量设置模板

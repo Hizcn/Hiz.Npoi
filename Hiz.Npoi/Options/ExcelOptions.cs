@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Hiz.Extended.Npoi
+namespace Hiz.Npoi
 {
     //TODO: 增加各个数据类型的默认单元格样式.
 

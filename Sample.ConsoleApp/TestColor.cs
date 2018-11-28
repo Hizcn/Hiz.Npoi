@@ -1,4 +1,4 @@
-﻿using Hiz.Extended.Npoi;
+﻿using Hiz.Npoi;
 using NPOI.HSSF.Record;
 using NPOI.HSSF.Util;
 using NPOI.SS.UserModel;

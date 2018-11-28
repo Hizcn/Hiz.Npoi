@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Hiz.Extended.Npoi
+namespace Hiz.Npoi
 {
     /* POI.Color
      * http://poi.apache.org/apidocs/dev/org/apache/poi/ss/usermodel/Color.html

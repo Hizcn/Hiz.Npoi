@@ -10,7 +10,7 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.Streaming;
 using NPOI.XSSF.UserModel;
 
-namespace Hiz.Extended.Npoi
+namespace Hiz.Npoi
 {
     partial class NpoiExtensions
     {

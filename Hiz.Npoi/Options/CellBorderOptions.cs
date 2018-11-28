@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using NPOI.SS.UserModel;
 
-namespace Hiz.Extended.Npoi
+namespace Hiz.Npoi
 {
     /// <summary>
     /// 单元格的边框配置
