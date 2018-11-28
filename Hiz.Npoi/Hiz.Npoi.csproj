@@ -4,15 +4,19 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\others\Hiz.Open.pfx</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
-    <Version>0.3.0</Version>
+    <Version>0.3.1</Version>
     <Authors>Hiz</Authors>
     <Description>Npoi Extensions</Description>
     <Copyright>Copyright © Hiz 2018</Copyright>
-    <PackageLicenseUrl>https://github.com/Hizcn/Hiz.Extended.Npoi/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/Hizcn/Hiz.Extended.Npoi</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/Hizcn/Hiz.Npoi/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Hizcn/Hiz.Npoi</PackageProjectUrl>
     <PackageIconUrl>https://www.nuget.org/Content/gallery/img/default-package-icon-256x256.png</PackageIconUrl>
     <PackageTags>NPOI</PackageTags>
-    <PackageReleaseNotes>Npoi Extensions</PackageReleaseNotes>
+    <PackageReleaseNotes>v0.3.0
+Support .Net Standard 2.0
+Strong name signature
+Xml documentation file
+New format .csproj file.</PackageReleaseNotes>
     <IncludeSymbols>true</IncludeSymbols>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
