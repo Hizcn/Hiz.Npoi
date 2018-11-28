@@ -20,8 +20,8 @@ style.SetFill(FillPattern.SolidForeground, IndexedColors.Red);
 ```
 
 Simple apply border template, like office.
-![Before](https://github.com/Hizcn/Hiz.Extended.Npoi/blob/master/images/01.png)
-![After](https://github.com/Hizcn/Hiz.Extended.Npoi/blob/master/images/02.png)
+![Before](https://github.com/Hizcn/Hiz.Npoi/blob/master/images/01.png)
+![After](https://github.com/Hizcn/Hiz.Npoi/blob/master/images/02.png)
 ```c#
 var template = new BorderTemplate();
 template.AddBorders(BorderTemplateEdges.AllAround, BorderStyle.Double, "Blue");
