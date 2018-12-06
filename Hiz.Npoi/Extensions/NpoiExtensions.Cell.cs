@@ -155,77 +155,78 @@ namespace Hiz.Npoi
 
             // 如果公开此方法, 需处理 @default 为空值的情况: GetCellValueAsDouble(@default != null ? (Double)@default : default(Double))
             if (type == TypeDouble)
-                return cell.GetCellValueAsDouble((Double)@default);
+                return cell.GetCellValueAsDoubleNullable((Double?)@default) ?? BlankValueOfDouble;
             if (type == TypeDoubleNullable)
                 return cell.GetCellValueAsDoubleNullable((Double?)@default);
 
             if (type == TypeSingle)
-                return cell.GetCellValueAsSingle((Single)@default);
+                return cell.GetCellValueAsSingleNullable((Single?)@default) ?? 0f;
             if (type == TypeSingleNullable)
                 return cell.GetCellValueAsSingleNullable((Single?)@default);
 
             if (type == TypeInt32)
-                return cell.GetCellValueAsInt32((Int32)@default);
+                return cell.GetCellValueAsInt32Nullable((Int32?)@default) ?? 0;
             if (type == TypeInt32Nullable)
                 return cell.GetCellValueAsInt32Nullable((Int32?)@default);
             if (type == TypeInt64)
-                return cell.GetCellValueAsInt64((Int64)@default);
+                return cell.GetCellValueAsInt64Nullable((Int64?)@default) ?? 0;
             if (type == TypeInt64Nullable)
                 return cell.GetCellValueAsInt64Nullable((Int64?)@default);
             if (type == TypeInt16)
-                return cell.GetCellValueAsInt16((Int16)@default);
+                return cell.GetCellValueAsInt16Nullable((Int16?)@default) ?? 0;
             if (type == TypeInt16Nullable)
                 return cell.GetCellValueAsInt16Nullable((Int16?)@default);
 
             if (type == TypeUInt32)
-                return cell.GetCellValueAsUInt32((UInt32)@default);
+                return cell.GetCellValueAsUInt32Nullable((UInt32?)@default) ?? 0U;
             if (type == TypeUInt32Nullable)
                 return cell.GetCellValueAsUInt32Nullable((UInt32?)@default);
             if (type == TypeUInt64)
-                return cell.GetCellValueAsUInt64((UInt64)@default);
+                return cell.GetCellValueAsUInt64Nullable((UInt64?)@default) ?? 0UL;
             if (type == TypeUInt64Nullable)
                 return cell.GetCellValueAsUInt64Nullable((UInt64?)@default);
             if (type == TypeUInt16)
-                return cell.GetCellValueAsUInt16((UInt16)@default);
+                return cell.GetCellValueAsUInt16Nullable((UInt16?)@default) ?? 0;
             if (type == TypeUInt16Nullable)
                 return cell.GetCellValueAsUInt16Nullable((UInt16?)@default);
 
             if (type == TypeDecimal)
-                return cell.GetCellValueAsDecimal((UInt16)@default);
+                return cell.GetCellValueAsDecimalNullable((Decimal?)@default) ?? Decimal.Zero;
             if (type == TypeDecimalNullable)
-                return cell.GetCellValueAsDecimalNullable((UInt16?)@default);
+                return cell.GetCellValueAsDecimalNullable((Decimal?)@default);
 
             if (type == TypeByte)
-                return cell.GetCellValueAsByte((Byte)@default);
+                return cell.GetCellValueAsByteNullable((Byte?)@default) ?? 0;
             if (type == TypeByteNullable)
                 return cell.GetCellValueAsByteNullable((Byte?)@default);
+
             if (type == TypeSByte)
-                return cell.GetCellValueAsSByte((SByte)@default);
+                return cell.GetCellValueAsSByteNullable((SByte?)@default) ?? 0;
             if (type == TypeSByteNullable)
                 return cell.GetCellValueAsSByteNullable((SByte?)@default);
 
             if (type == TypeDateTime)
-                return cell.GetCellValueAsDateTime((DateTime)@default);
+                return cell.GetCellValueAsDateTimeNullable((DateTime?)@default) ?? default(DateTime);
             if (type == TypeDateTimeNullable)
                 return cell.GetCellValueAsDateTimeNullable((DateTime?)@default);
 
             if (type == TypeBoolean)
-                return cell.GetCellValueAsBoolean((Boolean)@default);
+                return cell.GetCellValueAsBooleanNullable((Boolean?)@default) ?? BlankValueOfBoolean;
             if (type == TypeBooleanNullable)
                 return cell.GetCellValueAsBooleanNullable((Boolean?)@default);
 
             if (type == TypeChar)
-                return cell.GetCellValueAsChar((Char)@default);
+                return cell.GetCellValueAsCharNullable((Char?)@default) ?? Char.MinValue;
             if (type == TypeCharNullable)
                 return cell.GetCellValueAsCharNullable((Char?)@default);
 
             if (type == TypeTimeSpan)
-                return cell.GetCellValueAsTimeSpan((TimeSpan)@default);
+                return cell.GetCellValueAsTimeSpanNullable((TimeSpan?)@default) ?? TimeSpan.Zero;
             if (type == TypeTimeSpanNullable)
                 return cell.GetCellValueAsTimeSpanNullable((TimeSpan?)@default);
 
             if (type == TypeGuid)
-                return cell.GetCellValueAsGuid((Guid)@default);
+                return cell.GetCellValueAsGuidNullable((Guid?)@default) ?? Guid.Empty;
             if (type == TypeGuidNullable)
                 return cell.GetCellValueAsGuidNullable((Guid?)@default);
 
@@ -234,7 +235,18 @@ namespace Hiz.Npoi
 
         #region GetCellValue: Excel Scalar Types
 
-        static String GetCellValueAsString(this ICell cell, String @default = BlankValueOfString)
+        public static String GetCellValueAsString(this ICell cell, String @default = BlankValueOfString, bool trim = true)
+        {
+            var value = GetCellValueAsString(cell, null);
+            if (value == null)
+                return @default;
+
+            if (trim)
+                value = value.Trim();
+            return value;
+        }
+
+        static String GetCellValueAsString(this ICell cell, String @default)
         {
             switch (cell.GetCellTypeFinally())
             {
@@ -303,10 +315,10 @@ namespace Hiz.Npoi
         //     }
         // }
 
-        static Double GetCellValueAsDouble(this ICell cell, Double @default = BlankValueOfDouble)
-        {
-            return GetCellValueAsDoubleNullable(cell) ?? @default;
-        }
+        // static Double GetCellValueAsDouble(this ICell cell, Double @default = BlankValueOfDouble)
+        // {
+        //     return GetCellValueAsDoubleNullable(cell) ?? @default;
+        // }
         static Nullable<Double> GetCellValueAsDoubleNullable(this ICell cell, Double? @default = null)
         {
             switch (cell.GetCellTypeFinally())
@@ -330,10 +342,10 @@ namespace Hiz.Npoi
             }
         }
 
-        static DateTime GetCellValueAsDateTime(this ICell cell, DateTime @default = default(DateTime)/*DateTime.MinValue*/)
-        {
-            return GetCellValueAsDateTimeNullable(cell) ?? @default;
-        }
+        // static DateTime GetCellValueAsDateTime(this ICell cell, DateTime @default = default(DateTime)/*DateTime.MinValue*/)
+        // {
+        //     return GetCellValueAsDateTimeNullable(cell) ?? @default;
+        // }
         static Nullable<DateTime> GetCellValueAsDateTimeNullable(this ICell cell, DateTime? @default = null)
         {
             switch (cell.GetCellTypeFinally())
@@ -362,10 +374,10 @@ namespace Hiz.Npoi
             }
         }
 
-        static Boolean GetCellValueAsBoolean(this ICell cell, Boolean @default = BlankValueOfBoolean)
-        {
-            return GetCellValueAsBooleanNullable(cell) ?? @default;
-        }
+        // static Boolean GetCellValueAsBoolean(this ICell cell, Boolean @default = BlankValueOfBoolean)
+        // {
+        //     return GetCellValueAsBooleanNullable(cell) ?? @default;
+        // }
         static Nullable<Boolean> GetCellValueAsBooleanNullable(this ICell cell, Boolean? @default = null)
         {
             switch (cell.GetCellTypeFinally())
@@ -414,10 +426,10 @@ namespace Hiz.Npoi
 
         #region GetCellValue: Other .Net Scalar Types
 
-        static Byte GetCellValueAsByte(this ICell cell, Byte @default = 0)
-        {
-            return cell.GetCellValueAsByteNullable() ?? @default;
-        }
+        // static Byte GetCellValueAsByte(this ICell cell, Byte @default = 0)
+        // {
+        //     return cell.GetCellValueAsByteNullable() ?? @default;
+        // }
         static Nullable<Byte> GetCellValueAsByteNullable(this ICell cell, Byte? @default = null)
         {
             switch (cell.GetCellTypeFinally())
@@ -441,10 +453,10 @@ namespace Hiz.Npoi
                     throw new InvalidCastException();
             }
         }
-        static SByte GetCellValueAsSByte(this ICell cell, SByte @default = 0)
-        {
-            return cell.GetCellValueAsSByteNullable() ?? @default;
-        }
+        // static SByte GetCellValueAsSByte(this ICell cell, SByte @default = 0)
+        // {
+        //     return cell.GetCellValueAsSByteNullable() ?? @default;
+        // }
         static Nullable<SByte> GetCellValueAsSByteNullable(this ICell cell, SByte? @default = null)
         {
             switch (cell.GetCellTypeFinally())
@@ -467,10 +479,10 @@ namespace Hiz.Npoi
             }
         }
 
-        static Int16 GetCellValueAsInt16(this ICell cell, Int16 @default = 0)
-        {
-            return cell.GetCellValueAsInt16Nullable() ?? @default;
-        }
+        // static Int16 GetCellValueAsInt16(this ICell cell, Int16 @default = 0)
+        // {
+        //     return cell.GetCellValueAsInt16Nullable() ?? @default;
+        // }
         static Nullable<Int16> GetCellValueAsInt16Nullable(this ICell cell, Int16? @default = null)
         {
             switch (cell.GetCellTypeFinally())
@@ -492,10 +504,10 @@ namespace Hiz.Npoi
                     throw new InvalidCastException();
             }
         }
-        static Int32 GetCellValueAsInt32(this ICell cell, Int32 @default = 0)
-        {
-            return cell.GetCellValueAsInt32Nullable() ?? @default;
-        }
+        // static Int32 GetCellValueAsInt32(this ICell cell, Int32 @default = 0)
+        // {
+        //     return cell.GetCellValueAsInt32Nullable() ?? @default;
+        // }
         static Nullable<Int32> GetCellValueAsInt32Nullable(this ICell cell, Int32? @default = null)
         {
             switch (cell.GetCellTypeFinally())
@@ -517,10 +529,10 @@ namespace Hiz.Npoi
                     throw new InvalidCastException();
             }
         }
-        static Int64 GetCellValueAsInt64(this ICell cell, Int64 @default = 0L)
-        {
-            return cell.GetCellValueAsInt64Nullable() ?? @default;
-        }
+        // static Int64 GetCellValueAsInt64(this ICell cell, Int64 @default = 0L)
+        // {
+        //     return cell.GetCellValueAsInt64Nullable() ?? @default;
+        // }
         static Nullable<Int64> GetCellValueAsInt64Nullable(this ICell cell, Int64? @default = null)
         {
             switch (cell.GetCellTypeFinally())
@@ -543,10 +555,10 @@ namespace Hiz.Npoi
             }
         }
 
-        static UInt16 GetCellValueAsUInt16(this ICell cell, UInt16 @default = 0)
-        {
-            return cell.GetCellValueAsUInt16Nullable() ?? @default;
-        }
+        // static UInt16 GetCellValueAsUInt16(this ICell cell, UInt16 @default = 0)
+        // {
+        //     return cell.GetCellValueAsUInt16Nullable() ?? @default;
+        // }
         static Nullable<UInt16> GetCellValueAsUInt16Nullable(this ICell cell, UInt16? @default = null)
         {
             switch (cell.GetCellTypeFinally())
@@ -568,10 +580,10 @@ namespace Hiz.Npoi
                     throw new InvalidCastException();
             }
         }
-        static UInt32 GetCellValueAsUInt32(this ICell cell, UInt32 @default = 0U)
-        {
-            return cell.GetCellValueAsUInt32Nullable() ?? @default;
-        }
+        // static UInt32 GetCellValueAsUInt32(this ICell cell, UInt32 @default = 0U)
+        // {
+        //     return cell.GetCellValueAsUInt32Nullable() ?? @default;
+        // }
         static Nullable<UInt32> GetCellValueAsUInt32Nullable(this ICell cell, UInt32? @default = null)
         {
             switch (cell.GetCellTypeFinally())
@@ -593,10 +605,10 @@ namespace Hiz.Npoi
                     throw new InvalidCastException();
             }
         }
-        static UInt64 GetCellValueAsUInt64(this ICell cell, UInt64 @default = 0UL)
-        {
-            return cell.GetCellValueAsUInt64Nullable() ?? @default;
-        }
+        // static UInt64 GetCellValueAsUInt64(this ICell cell, UInt64 @default = 0UL)
+        // {
+        //     return cell.GetCellValueAsUInt64Nullable() ?? @default;
+        // }
         static Nullable<UInt64> GetCellValueAsUInt64Nullable(this ICell cell, UInt64? @default = null)
         {
             switch (cell.GetCellTypeFinally())
@@ -618,11 +630,10 @@ namespace Hiz.Npoi
                     throw new InvalidCastException();
             }
         }
-
-        static Single GetCellValueAsSingle(this ICell cell, Single @default = 0f)
-        {
-            return cell.GetCellValueAsSingleNullable() ?? @default;
-        }
+        // static Single GetCellValueAsSingle(this ICell cell, Single @default = 0f)
+        // {
+        //     return cell.GetCellValueAsSingleNullable() ?? @default;
+        // }
         static Nullable<Single> GetCellValueAsSingleNullable(this ICell cell, Single? @default = null)
         {
             switch (cell.GetCellTypeFinally())
@@ -652,11 +663,10 @@ namespace Hiz.Npoi
                     throw new InvalidCastException();
             }
         }
-
-        static Decimal GetCellValueAsDecimal(this ICell cell, Decimal @default = Decimal.Zero)
-        {
-            return cell.GetCellValueAsDecimalNullable() ?? @default;
-        }
+        // static Decimal GetCellValueAsDecimal(this ICell cell, Decimal @default = Decimal.Zero)
+        // {
+        //     return cell.GetCellValueAsDecimalNullable() ?? @default;
+        // }
         static Nullable<Decimal> GetCellValueAsDecimalNullable(this ICell cell, Decimal? @default = null)
         {
             switch (cell.GetCellTypeFinally())
@@ -682,10 +692,10 @@ namespace Hiz.Npoi
             }
         }
 
-        static Char GetCellValueAsChar(this ICell cell, Char @default = char.MinValue/*(Char)0*/)
-        {
-            return cell.GetCellValueAsCharNullable() ?? @default;
-        }
+        // static Char GetCellValueAsChar(this ICell cell, Char @default = char.MinValue/*(Char)0*/)
+        // {
+        //     return cell.GetCellValueAsCharNullable() ?? @default;
+        // }
         static Nullable<Char> GetCellValueAsCharNullable(this ICell cell, Char? @default = null)
         {
             var value = cell.GetCellValueAsString();
@@ -702,10 +712,10 @@ namespace Hiz.Npoi
             return @default;
         }
 
-        static Nullable<Guid> GetCellValueAsGuid(this ICell cell, Guid @default = default(Guid)/*Guid.Empty*/)
-        {
-            return cell.GetCellValueAsGuidNullable() ?? @default;
-        }
+        // static Nullable<Guid> GetCellValueAsGuid(this ICell cell, Guid @default = default(Guid)/*Guid.Empty*/)
+        // {
+        //     return cell.GetCellValueAsGuidNullable() ?? @default;
+        // }
         static Nullable<Guid> GetCellValueAsGuidNullable(this ICell cell, Guid? @default = null)
         {
             switch (cell.GetCellTypeFinally())
@@ -727,10 +737,10 @@ namespace Hiz.Npoi
                     throw new InvalidCastException();
             }
         }
-        static Nullable<TimeSpan> GetCellValueAsTimeSpan(this ICell cell, TimeSpan @default = default(TimeSpan)/*TimeSpan.Zero*/)
-        {
-            return cell.GetCellValueAsTimeSpanNullable() ?? @default;
-        }
+        // static Nullable<TimeSpan> GetCellValueAsTimeSpan(this ICell cell, TimeSpan @default = default(TimeSpan)/*TimeSpan.Zero*/)
+        // {
+        //     return cell.GetCellValueAsTimeSpanNullable() ?? @default;
+        // }
         static Nullable<TimeSpan> GetCellValueAsTimeSpanNullable(this ICell cell, TimeSpan? @default = null)
         {
             switch (cell.GetCellTypeFinally())

@@ -9,6 +9,7 @@ using NPOI.SS.UserModel;
 using NPOI.HSSF.UserModel;
 using NPOI.XSSF.UserModel;
 using NPOI.XSSF.Streaming;
+using NPOI.SS.Util;
 
 namespace Hiz.Npoi
 {
@@ -625,5 +626,69 @@ namespace Hiz.Npoi
          */
 
         #endregion
+
+        static void AddMergedRegion(this ISheet sheet, int rowFirst, int rowLast, int columnFirst, int columnLast)
+        {
+            sheet.AddMergedRegion(new CellRangeAddress(rowFirst, rowLast, columnFirst, columnLast));
+        }
+        static void SetAutoFilter(this ISheet sheet, int rowIndex)
+        {
+            var row = sheet.GetRow(rowIndex);
+            if (row != null)
+            {
+                sheet.SetAutoFilter(new CellRangeAddress(rowIndex, rowIndex, row.FirstCellNum, row.LastCellNum));
+            }
+        }
+
+        /* DataValidationConstraint.ValidationType
+         * https://poi.apache.org/apidocs/dev/org/apache/poi/ss/usermodel/DataValidationConstraint.ValidationType.html
+         * 
+         * NPOI.SS.UserModel.ValidationType
+         * 
+         * 
+         * DataValidationConstraint.OperatorType
+         * https://poi.apache.org/apidocs/dev/org/apache/poi/ss/usermodel/DataValidationConstraint.OperatorType.html
+         * IGNORED = 0 // default value to supply when the operator type is not used
+         * BETWEEN = 0 // 介于
+         * NOT_BETWEEN = 1 // 未介于
+         * EQUAL = 2 // 等于
+         * NOT_EQUAL = 3 // 不等于
+         * GREATER_THAN = 4 // 大于
+         * LESS_THAN = 5 // 小于
+         * GREATER_OR_EQUAL = 6 // 大于等于
+         * LESS_OR_EQUAL = 7 // 小于等于
+         * 
+         * NPOI.SS.UserModel.OperatorType
+         * 
+         * 
+         * IDataValidationHelper.CreateintConstraint = CreateIntegerConstraint;
+         */
+         // 添加单元格的数据验证规则
+        static void CreateValidation(this ISheet sheet)
+        {
+            var helper = sheet.GetDataValidationHelper();
+            // 创建条件
+            var @explicit = helper.CreateExplicitListConstraint(new string[] { "男", "女" });
+
+            // 创建验证 (指定位置信息)
+            var regions = new CellRangeAddressList();
+            var validation = helper.CreateValidation(@explicit, regions);
+
+            var xssf = validation as XSSFDataValidation;
+            if (xssf!=null)
+            {
+                xssf.SuppressDropDownArrow = true;
+                xssf.ShowErrorBox = true;
+            }
+            var hssf = validation as HSSFDataValidation;
+            if (hssf!=null)
+            {
+                hssf.SuppressDropDownArrow = false;
+            }
+            validation.EmptyCellAllowed = true;
+            validation.ShowPromptBox = true;
+
+            sheet.AddValidationData(validation);
+        }
     }
 }
