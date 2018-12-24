@@ -9,6 +9,7 @@ using NPOI.SS.UserModel;
 using NPOI.HSSF.UserModel;
 using NPOI.XSSF.UserModel;
 using NPOI.XSSF.Streaming;
+using System.Runtime.Serialization;
 
 namespace Hiz.Npoi
 {
@@ -229,6 +230,10 @@ namespace Hiz.Npoi
                 return cell.GetCellValueAsGuidNullable((Guid?)@default) ?? Guid.Empty;
             if (type == TypeGuidNullable)
                 return cell.GetCellValueAsGuidNullable((Guid?)@default);
+
+            if (type.IsEnum)
+            {
+            }
 
             throw new NotSupportedException();
         }
@@ -765,9 +770,13 @@ namespace Hiz.Npoi
 
         #endregion
 
-        //TODO:
-        static TEnum GetCellValueAsEnum<TEnum>(this ICell cell, TEnum @default = default(TEnum)) // where TEnum : struct
+        static readonly Type TypeEnumMemberAttribute = typeof(EnumMemberAttribute);
+
+        static object InternalGetCellValueAsEnum(ICell cell, Type type, object @default)
         {
+            if (!type.IsEnum)
+                throw new ArgumentException();
+
             switch (cell.GetCellTypeFinally())
             {
                 case CellType.Blank:
@@ -777,26 +786,47 @@ namespace Hiz.Npoi
                         var text = cell.StringCellValue;
                         if (!string.IsNullOrWhiteSpace(text))
                         {
-                            return (TEnum)Enum.Parse(typeof(TEnum), text);
+                            // return EnumHelper.Parse(type, text);
+                            return Enum.Parse(type, text, true);
                         }
                         return @default;
                     }
                 case CellType.Numeric:
                     {
-                        var type = typeof(TEnum);
-                        if (!type.IsEnum)
-                            throw new ArgumentException();
-                        var underlying = type.GetEnumUnderlyingType();
-                        var value = cell.NumericCellValue;
-                        var convertible = (IConvertible)value;
+                        var numeric = cell.NumericCellValue;
 
-                        throw new NotSupportedException();
+                        object value = null;
+                        var underlying = type.GetEnumUnderlyingType();
+                        if (underlying == TypeSByte)
+                            value = checked((SByte)numeric);
+                        if (underlying == TypeInt16)
+                            value = checked((Int16)numeric);
+                        if (underlying == TypeInt32)
+                            value = checked((Int32)numeric);
+                        if (underlying == TypeInt64)
+                            value = checked((Int64)numeric);
+                        if (underlying == TypeByte)
+                            value = checked((Byte)numeric);
+                        if (underlying == TypeUInt16)
+                            value = checked((UInt16)numeric);
+                        if (underlying == TypeUInt32)
+                            value = checked((UInt32)numeric);
+                        if (underlying == TypeUInt64)
+                            value = checked((UInt64)numeric);
+                        if (value == null)
+                            throw new InvalidCastException();
+
+                        return Enum.ToObject(type, value);
                     }
                 case CellType.Boolean:
                 case CellType.Error:
                 default:
                     throw new InvalidCastException();
             }
+        }
+
+        static void SetCellValueAsNumeric<TEnum>(this ICell cell, TEnum value) // where TEnum : struct
+        {
         }
 
         #region SetCellValue
@@ -893,11 +923,21 @@ namespace Hiz.Npoi
                 }
                 else
                 {
-                    // Char
-                    // Guid
-                    // TimeSpan
-                    // Others
-                    cell.SetCellValue(value.ToString());
+                    // Enum
+                    var type = value.GetType();
+                    if (type.IsEnum)
+                    {
+                        var text = EnumHelper.GetString(value);
+                        cell.SetCellValue(text);
+                    }
+                    else
+                    {
+                        // Char
+                        // Guid
+                        // TimeSpan
+                        // Others
+                        cell.SetCellValue(value.ToString());
+                    }
                 }
             }
             else

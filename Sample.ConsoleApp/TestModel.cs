@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Hiz.Npoi.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Sample.ConsoleApp
@@ -14,6 +16,7 @@ namespace Sample.ConsoleApp
 
     /* 动态元素 (数据)
      */
+    [NpoiTable()]
     class TestModel : IEquatable<TestModel>
     {
         public string String { get; set; }
@@ -27,6 +30,9 @@ namespace Sample.ConsoleApp
         public double Double { get; set; }
         public double? DoubleNullable { get; set; }
 
+        public sbyte SByte { get; set; }
+        public sbyte? SByteNullable { get; set; }
+
         public short Int16 { get; set; }
         public short? Int16Nullable { get; set; }
 
@@ -36,6 +42,9 @@ namespace Sample.ConsoleApp
         public long Int64 { get; set; }
         public long? Int64Nullable { get; set; }
 
+        public byte Byte { get; set; }
+        public byte? ByteNullable { get; set; }
+
         public ushort UInt16 { get; set; }
         public ushort? UInt16Nullable { get; set; }
 
@@ -44,12 +53,6 @@ namespace Sample.ConsoleApp
 
         public ulong UInt64 { get; set; }
         public ulong? UInt64Nullable { get; set; }
-
-        public byte Byte { get; set; }
-        public byte? ByteNullable { get; set; }
-
-        public sbyte SByte { get; set; }
-        public sbyte? SByteNullable { get; set; }
 
         public bool Boolean { get; set; }
         public bool? BooleanNullable { get; set; }
@@ -66,6 +69,10 @@ namespace Sample.ConsoleApp
         public TimeSpan TimeSpan { get; set; }
         public TimeSpan? TimeSpanNullable { get; set; }
 
+        [NpoiValueAs(NPOI.SS.UserModel.CellType.Numeric)]
+        public SampleEnum Enum { get; set; }
+        public SampleEnum? EnumNullable { get; set; }
+
         public bool Equals(TestModel other)
         {
             return other != null
@@ -76,22 +83,22 @@ namespace Sample.ConsoleApp
                 && this.SingleNullable == other.SingleNullable
                 && this.Double == other.Double
                 && this.DoubleNullable == other.DoubleNullable
+                && this.SByte == other.SByte
+                && this.SByteNullable == other.SByteNullable
                 && this.Int16 == other.Int16
                 && this.Int16Nullable == other.Int16Nullable
                 && this.Int32 == other.Int32
                 && this.Int32Nullable == other.Int32Nullable
                 && this.Int64 == other.Int64
                 && this.Int64Nullable == other.Int64Nullable
+                && this.Byte == other.Byte
+                && this.ByteNullable == other.ByteNullable
                 && this.UInt16 == other.UInt16
                 && this.UInt16Nullable == other.UInt16Nullable
                 && this.UInt32 == other.UInt32
                 && this.UInt32Nullable == other.UInt32Nullable
                 && this.UInt64 == other.UInt64
                 && this.UInt64Nullable == other.UInt64Nullable
-                && this.Byte == other.Byte
-                && this.ByteNullable == other.ByteNullable
-                && this.SByte == other.SByte
-                && this.SByteNullable == other.SByteNullable
                 && this.Boolean == other.Boolean
                 && this.BooleanNullable == other.BooleanNullable
                 && this.Char == other.Char
@@ -102,6 +109,8 @@ namespace Sample.ConsoleApp
                 && this.DateTimeNullable == other.DateTimeNullable
                 && this.TimeSpan == other.TimeSpan
                 && this.TimeSpanNullable == other.TimeSpanNullable
+                && this.Enum == other.Enum
+                && this.EnumNullable == other.EnumNullable
                 ;
         }
         public override bool Equals(object other)
@@ -112,5 +121,21 @@ namespace Sample.ConsoleApp
         {
             return base.GetHashCode();
         }
+    }
+
+    [Flags]
+    enum SampleEnum : short
+    {
+        Unknown = 0,
+        None = 0,
+
+        [EnumMember(Value = "v1")]
+        One = 0x01,
+
+        Two = 0x02,
+
+        Three = One | Two,
+
+        Four = 0x04,
     }
 }

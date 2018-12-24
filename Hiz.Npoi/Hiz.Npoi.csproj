@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net40-client;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net40-client;net461;netstandard2.0</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\others\Hiz.Open.pfx</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
@@ -33,9 +33,6 @@ New format .csproj file.</PackageReleaseNotes>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NPOI" Version="2.4.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Attributes\" />
+    <PackageReference Include="NPOI" Version="2.4.1" />
   </ItemGroup>
 </Project>

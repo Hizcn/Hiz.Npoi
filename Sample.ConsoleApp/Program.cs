@@ -11,6 +11,7 @@ using NPOI.XSSF.Streaming;
 using System.IO;
 using NPOI.HSSF.Record;
 using NPOI.HSSF.Util;
+using System.Runtime.Serialization;
 
 namespace Sample.ConsoleApp
 {
@@ -18,15 +19,97 @@ namespace Sample.ConsoleApp
     {
         static void Main(string[] args)
         {
-            //Sample.TestBorderTemplate();
+            TestEnum.Test();
 
-            TestColor.TestColorOperators();
+            //Sample.TestBorderTemplate();
+            //Test8();
+
+            //TestColor.TestColorOperators();
             //Test7();
 
 
             Console.WriteLine("OK");
             Console.ReadLine();
         }
+
+        static void Test9()
+        {
+            byte v1 = 0x80;
+            ushort v2 = 0x8000;
+            uint v3 = 0x80000000;
+            ulong v4= 0x8000000000000000;
+
+            var v5 = (sbyte)v1;
+            var v6 = (short)v2;
+            var v7 = (int)v3;
+            var v8 = (long)v4;
+
+            //var bs1 = Bits.GetBits(v1);
+            //var bs2 = Bits.GetBits(v2);
+            //var bs3 = Bits.GetBits(v3);
+            //var bs4 = Bits.GetBits(v4);
+            //var bs5 = Bits.GetBits(v5);
+            //var bs6 = Bits.GetBits(v6);
+
+            //var as3 = bs3.Select(i => i.ToString("X8")).ToArray();
+            //var as5 = bs5.Select(i => i.ToString("X8")).ToArray();
+            //var as4 = bs4.Select(i => i.ToString("X8")).ToArray();
+            //var as6 = bs6.Select(i => i.ToString("X8")).ToArray();
+
+            var b1 = Bits.OnlySingle(v1);
+            var b2 = Bits.OnlySingle(v2);
+            var b3 = Bits.OnlySingle(v3);
+            var b4 = Bits.OnlySingle(v4);
+            var b5 = Bits.OnlySingle(v5);
+            var b6 = Bits.OnlySingle(v6);
+            var b7 = Bits.OnlySingle(v7);
+            var b8 = Bits.OnlySingle(v8);
+
+            var s1 = Bits.MoreSingle(++v1);
+            var s2 = Bits.MoreSingle(++v2);
+            var s3 = Bits.MoreSingle(++v3);
+            var s4 = Bits.MoreSingle(++v4);
+            var s5 = Bits.MoreSingle(++v5);
+            var s6 = Bits.MoreSingle(++v6);
+            var s7 = Bits.MoreSingle(++v7);
+            var s8 = Bits.MoreSingle(++v8);
+        }
+        static void Test8()
+        {
+            //var s1 = TestEnum.None.ToString();
+            //var s2 = TestEnum.Unknown.ToString();
+
+            //Enum.TryParse<TestEnum>("one", true, out TestEnum v1);
+            //Enum.TryParse<TestEnum>("One", out TestEnum v2);
+            //Enum.TryParse<TestEnum>("v1", out TestEnum v3);
+
+            EnumHelper.TryParse<SampleEnum>("v1", out SampleEnum v4);
+            EnumHelper.TryParse<SampleEnum>("V1", out SampleEnum v5);
+            EnumHelper.TryParse<SampleEnum>("two", out SampleEnum v6);
+
+            //var s3 = EnumHelper.GetString(TestEnum.One);
+            //var s4 = EnumHelper.GetString(TestEnum.Two);
+
+
+            //var ts1 = Enum.GetValues(typeof(TestEnum)).Cast<TestEnum>().ToArray();
+            //var ts2 = Enum.GetValues(typeof(TestEnum)).Cast<short>().ToArray();
+
+            //var v3 = Enum.IsDefined(typeof(TestEnum), TestEnum.Three);
+            //var v4 = Enum.IsDefined(typeof(TestEnum), TestEnum.Four);
+            //var v5 = Enum.IsDefined(typeof(TestEnum), TestEnum.Four| TestEnum.One);
+            //var v3_2 = Enum.IsDefined(typeof(TestEnum), TestEnum.One | TestEnum.Two);
+            //var v3_3 = Enum.IsDefined(typeof(TestEnum), (short)3);
+            //var v3_4 = Enum.IsDefined(typeof(TestEnum), "Three");
+            //var v3_5 = Enum.IsDefined(typeof(TestEnum), "One, Two");
+
+            //var o3 = Enum.ToObject(typeof(TestEnum), (object)5);
+
+            //var s1= TestEnum.Three.ToString();
+            //var s2 = ((object)TestEnum.Three).ToString();
+            //var s3 = ((TestEnum)0x80).ToString();
+
+        }
+
         static void Test7()
         {
             var workbook1x = CreateWorkbook(true);
@@ -263,4 +346,6 @@ namespace Sample.ConsoleApp
             return workbook;
         }
     }
+
+
 }

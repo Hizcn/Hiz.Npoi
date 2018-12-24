@@ -8,6 +8,7 @@ using System.Text;
 namespace Hiz.Npoi
 {
     //TODO: 增加各个数据类型的默认单元格样式.
+    //TODO: 增加一个全局默认 ExcelOptions.
 
     class ExcelOptions
     {

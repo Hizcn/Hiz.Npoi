@@ -515,6 +515,11 @@ namespace Hiz.Npoi
             sheet.SetColumnWidth(index, units);
         }
 
+        public static void SetColumnWidthInCharacters(this ISheet sheet, int index, float width)
+        {
+            SetColumnWidth(sheet, index, width, LengthUnit.Character);
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -590,6 +595,11 @@ namespace Hiz.Npoi
                 default:
                     throw new ArgumentOutOfRangeException(nameof(unit));
             }
+        }
+
+        public static float GetColumnWidthInCharacters(this ISheet sheet, int index)
+        {
+            return GetColumnWidth(sheet, index, LengthUnit.Character);
         }
 
         /* v2.4 SheetUtil.GetColumnWidth() 取消 firstRow/lastRow 参数.
