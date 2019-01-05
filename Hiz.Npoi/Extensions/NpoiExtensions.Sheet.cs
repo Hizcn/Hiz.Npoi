@@ -700,5 +700,15 @@ namespace Hiz.Npoi
 
             sheet.AddValidationData(validation);
         }
+
+        public static IDrawing GetOrAddDrawingPatriarch(this ISheet sheet)
+        {
+            if (sheet == null)
+                throw new ArgumentNullException(nameof(sheet));
+
+            if (sheet.DrawingPatriarch != null)
+                return sheet.DrawingPatriarch;
+            return sheet.CreateDrawingPatriarch();
+        }
     }
 }

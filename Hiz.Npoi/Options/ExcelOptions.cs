@@ -12,6 +12,8 @@ namespace Hiz.Npoi
 
     class ExcelOptions
     {
+        public OfficeArchiveFormat FileFormat { get; set; }
+
         #region 引用资源
 
         // Attribute 配置使用 String Key, 应用 IWorkbook 使用 Short Index;
@@ -131,9 +133,15 @@ namespace Hiz.Npoi
         #endregion
 
         string _DefaultDateTimeFormat = "yyyy-mm-dd hh:mm:ss";
+        /// <summary>
+        /// 默认时间格式 (用于显示时间单元格值)
+        /// </summary>
         public virtual string DefaultDateTimeFormat { get => _DefaultDateTimeFormat; set => _DefaultDateTimeFormat = value; }
 
         FontOptions _DefaultFontOptions = new FontOptions(XSSFFont.DEFAULT_FONT_NAME, XSSFFont.DEFAULT_FONT_SIZE);
+        /// <summary>
+        /// 默认字体
+        /// </summary>
         public virtual FontOptions DefaultFont { get => _DefaultFontOptions; set => _DefaultFontOptions = value; }
 
         public ExcelOptions()

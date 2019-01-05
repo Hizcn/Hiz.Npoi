@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using System.ComponentModel.DataAnnotations;
 
 namespace Sample.ConsoleApp
 {
@@ -69,7 +70,7 @@ namespace Sample.ConsoleApp
         public TimeSpan TimeSpan { get; set; }
         public TimeSpan? TimeSpanNullable { get; set; }
 
-        [NpoiValueAs(NPOI.SS.UserModel.CellType.Numeric)]
+        //[NpoiValueAs(NPOI.SS.UserModel.CellType.Numeric)]
         public SampleEnum Enum { get; set; }
         public SampleEnum? EnumNullable { get; set; }
 

@@ -757,8 +757,8 @@ namespace Hiz.Npoi
 
             // 由于 IFont 接口 FontHeight/FontHeightInPoints 属性数据类型设计不太合理
             // 为了统一, 对于带小数部分不作支持, 因此此处取整后再转换..
-            var points = (short)size;
-            var height = (short)(points * 20);
+            // 2019-01-01: NPOIv2.4.1 FontHeight/FontHeightInPoints 已调整为 Double 类型;
+            var points = (double)size;
             var weight = bold ? (short)FontBoldWeight.Bold : (short)FontBoldWeight.Normal;
 
             var sssf = workbook as SXSSFWorkbook;
@@ -841,6 +841,7 @@ namespace Hiz.Npoi
             {
                 var palette = hssf.GetCustomPalette();
                 var c = FindColorIndexedWithPalette(palette, color.Indexed, color.Argb, true);
+                var height = (short)(size * 20f);
                 var font = workbook.FindFont(weight, c, height, name, italic, strikeout, offset, underline);
                 if (font == null)
                 {

@@ -6,24 +6,24 @@ using System.Text;
 
 namespace Hiz.Npoi.Attributes
 {
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-    public class NpoiValueAsAttribute : Attribute
-    {
-        CellType _CellType = CellType.Unknown;
-        public CellType CellType { get => _CellType; }
+    // [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+    // public class NpoiValueAsAttribute : NpoiAttribute
+    // {
+    //     CellType _CellType = CellType.Unknown;
+    //     public CellType CellType { get => _CellType; }
 
-        public NpoiValueAsAttribute(CellType type)
-        {
-            this._CellType = type;
-        }
-    }
+    //     public NpoiValueAsAttribute(CellType type)
+    //     {
+    //         this._CellType = type;
+    //     }
+    // }
 
     // [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-    // public class ValueAsNumericAttribute : Attribute
+    // public class ValueAsNumericAttribute : NpoiAttribute
     // {
     // }
     // [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-    // public class ValueAsStringAttribute : Attribute
+    // public class ValueAsStringAttribute : NpoiAttribute
     // {
     // }
 }

@@ -330,12 +330,12 @@ namespace Hiz.Npoi
             return cell.GetCellValue<T>(@default);
         }
 
-        public static string GetCellValueAsString(this IRow row, int cellIndex, string @default = BlankValueOfString, bool trim = true)
+        public static string GetCellValueAsString(this IRow row, int cellIndex, string @default = null, bool trim = true)
         {
             var cell = row.GetCell(cellIndex, MissingCellPolicy.RETURN_NULL_AND_BLANK);
             if (cell == null)
                 return @default;
-            return cell.GetCellValueAsString(@default, trim);
+            return _Convert.GetCellValueAsString(cell, @default, trim);
         }
     }
 }
