@@ -1,0 +1,13 @@
+v0.5.0-beta
+Update: NPOIv2.4.1
+Feature: Xpoi.ExportMany()/ImportMany().
+
+v0.3.3
+Fixed Bug: ICell.GetCellValue<decimal>();
+Add Helper: Xpoi.OpenRead(...);
+
+v0.3.0
+Support .Net Standard 2.0
+Strong name signature.
+Xml documentation file.
+New format .csproj file.
