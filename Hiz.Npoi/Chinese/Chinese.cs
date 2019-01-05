@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Hiz.Npoi
 {
-    static class Chinese
+    public static class Chinese
     {
         public static ExcelOptions GetExcelOptions()
         {

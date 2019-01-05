@@ -11,30 +11,36 @@ namespace Hiz.Npoi
 {
     class ExcelService
     {
+        // 默认报告频率
+        const int DefaultReportFrequency = 10000;
+
+        // 报告频率
+        int _ReportFrequency = DefaultReportFrequency;
+
         AnnotationProvider _AnnotationService = new NpoiAnnotationProvider();
 
         #region 集合导出
 
         // 导出: IEnumerable<T> => IWorkbook
-        public virtual IWorkbook ExportMany<T>(IEnumerable<T> datas, ExcelOptions options, CancellationToken cancel = default(CancellationToken), IProgress<int> progress = null)
+        public virtual IWorkbook ExportMany<T>(IEnumerable<T> datas, RuntimeOptions options, CancellationToken cancel = default(CancellationToken), IProgress<int> progress = null)
         {
             if (datas == null)
                 throw new ArgumentNullException();
 
             // 获取数据注解;
-            var root = _AnnotationService.GetExport<T>();
-            var annotations = root.Properties;
+            var descriptor = _AnnotationService.GetExport<T>();
+            var annotations = descriptor.Properties;
 
             // 创建文档实例;
             IWorkbook workbook = options.FileFormat == OfficeArchiveFormat.Binary ? (IWorkbook)new HSSFWorkbook() : (IWorkbook)new XSSFWorkbook();
 
             // 创建实例的上下文;
-            //var context = new ExcelContext(workbook, _Styles);
+            var context = new ExcelContext(workbook, options.ExcelStyles);
 
             // 更改默认字体;
-            //var font = context.Options.DefaultFont;
-            //if (font != null)
-            //    workbook.SetDefaultFont(font.FontName, font.FontHeightInPoints, font.IsBold, font.IsItalic, font.Underline, font.IsStrikeout, font.TypeOffset, 0);
+            var font = options.ExcelStyles.DefaultFont;
+            if (font != null)
+                workbook.SetDefaultFont(font.FontName, font.FontHeightInPoints, font.IsBold, font.IsItalic, font.Underline, font.IsStrikeout, font.TypeOffset, 0);
 
             // 添加样式资源;
             //foreach (var a in annotations)
@@ -45,14 +51,14 @@ namespace Hiz.Npoi
             ISheet sheet = null;
 
             // 报告频率;
-            //var frequency = this._ReportFrequency;
+            var frequency = this._ReportFrequency;
             // 每个频率计数;
             var p = 0;
             // 数据集合索引;
             var i = 0;
 
             // 数据区域允许最大行数 (不含区域表尾) // 包含: 表单标题/区域表头
-            //var gridRowMax = context.MaxRows;
+            var gridRowMax = context.MaxRows;
             //if (options.HasGridFooter)
             //    gridRowMax--;
 
@@ -66,6 +72,14 @@ namespace Hiz.Npoi
                 {
                     sheet = CreateSheet<T>(workbook, options, annotations);
                     r = sheet.LastRowNum;
+                    r++;
+
+                    if (descriptor.HeaderVisible)
+                    {
+                        CreateGridHeader(sheet, r, descriptor);
+                        r++;
+                    }
+
                     gridRowFirst = r;
                 }
 
@@ -80,33 +94,33 @@ namespace Hiz.Npoi
                     {
                         cell.SetCellValue(value);
                     }
-                    //if (t.CellStyleIndexed != null)
-                    //{
-                    //    cell.CellStyle = t.CellStyleIndexed;
-                    //}
+                    if (!string.IsNullOrEmpty(t.CellStyle))
+                    {
+                        cell.CellStyle = context.GetCellStyle(t.CellStyle);
+                    }
                 }
 
                 i++;
-                //if (++p == frequency) // 求余性能较差, 因此此处使用递增比较
-                //{
-                //    // 每一万条检测一次取消指令, 以及报告进度一次...
-                //    cancel.ThrowIfCancellationRequested();
-                //    if (progress != null)
-                //        progress.Report(i);
-                //    p = 0;
-                //}
+                if (++p == frequency) // 求余性能较差, 因此此处使用递增比较
+                {
+                    // 每一万条检测一次取消指令, 以及报告进度一次...
+                    cancel.ThrowIfCancellationRequested();
+                    if (progress != null)
+                        progress.Report(i);
+                    p = 0;
+                }
 
-                //if (r == gridRowMax)
-                //{
-                //    if (options.HasGridFooter)
-                //    {
-                //        CreateGridFooter(sheet, r);
-                //    }
+                if (r == gridRowMax)
+                {
+                    //if (options.HasGridFooter)
+                    //{
+                    //    CreateGridFooter(sheet, r);
+                    //}
 
-                //    EndOfSheet(sheet, annotations, gridRowFirst, r - gridRowFirst);
-                //    sheet = null;
-                //    r = 0;
-                //}
+                    EndOfSheet(sheet, annotations, gridRowFirst, r - gridRowFirst);
+                    sheet = null;
+                    r = 0;
+                }
             }
             if (sheet != null)
             {
@@ -115,21 +129,21 @@ namespace Hiz.Npoi
                 //    CreateGridFooter(sheet, r);
                 //}
 
-                //EndOfSheet(sheet, annotations, gridRowFirst, r - gridRowFirst);
+                EndOfSheet(sheet, annotations, gridRowFirst, r - gridRowFirst);
             }
 
             return workbook;
         }
 
         // 创建表单
-        ISheet CreateSheet<T>(IWorkbook workbook, ExcelOptions options, IList<NpoiPropertyDescriptor<T>> annotations)
+        ISheet CreateSheet<T>(IWorkbook workbook, RuntimeOptions options, IList<NpoiPropertyDescriptor<T>> annotations)
         {
             ISheet sheet = workbook.CreateSheet();
-            var r = 0; // 当前表单行的索引
+            var r = 0; // 当前表单 行的索引
 
-            //// 创建表单标题
-            //if (options.HasTitle)
-            //    CreateTitleRow(sheet, r++, annotations.Count, options.Title);
+            // 创建表单标题
+            if (options.HasTitle)
+                CreateTitleRow(sheet, r++, annotations.Count, options.Title);
 
             //// 创建(表格)表头
             //if (options.HasGridHeader)
@@ -151,21 +165,23 @@ namespace Hiz.Npoi
         }
 
         // 创建表头
-        void CreateGridHeader<T>(ISheet sheet, int rowIndex, IList<NpoiPropertyDescriptor<T>> annotations)
+        void CreateGridHeader<T>(ISheet sheet, int rowIndex, NpoiTypeDescriptor<T> descriptor)
         {
             // 表头
             var header = sheet.CreateRow(rowIndex);
+            var annotations = descriptor.Properties;
+
             for (var i = 0; i < annotations.Count; i++)
             {
                 var a = annotations[i];
 
                 var cell = header.CreateCell(i);
 
-                //cell.SetCellValue(a.GetActualColumnHeader());
+                cell.SetCellValue(a.GetActualColumnHeader());
 
-                //// 如果指定手动设置列宽
-                //if (a.ColumnWidth > 0f)
-                //    sheet.SetColumnWidthInCharacters(i, a.ColumnWidth);
+                // 如果指定手动设置列宽
+                if (a.Width > 0f)
+                    sheet.SetColumnWidthInCharacters(i, a.Width);
             }
 
             // 固定表头

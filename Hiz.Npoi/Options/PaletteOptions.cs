@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hiz.Npoi
 {
-    class PaletteOptions : INamed
+    public class PaletteOptions : INamed
     {
         public string Name { get; set; }
 

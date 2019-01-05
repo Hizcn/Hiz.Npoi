@@ -50,6 +50,9 @@ namespace Hiz.Npoi
             }
         }
 
+        /// <summary>
+        /// 是否含有 透明 通道.
+        /// </summary>
         public bool HasAlpha
         {
             get
@@ -58,6 +61,9 @@ namespace Hiz.Npoi
             }
         }
 
+        /// <summary>
+        /// 是否 自动颜色
+        /// </summary>
         public bool IsAutomatic
         {
             get
@@ -66,6 +72,9 @@ namespace Hiz.Npoi
             }
         }
 
+        /// <summary>
+        /// 是否 黑色
+        /// </summary>
         public bool IsBlack
         {
             get
@@ -74,6 +83,9 @@ namespace Hiz.Npoi
             }
         }
 
+        /// <summary>
+        /// Alpha
+        /// </summary>
         public byte A
         {
             get
@@ -82,6 +94,9 @@ namespace Hiz.Npoi
                 return GetAlpha(this.Argb);
             }
         }
+        /// <summary>
+        /// Red
+        /// </summary>
         public byte R
         {
             get
@@ -90,6 +105,9 @@ namespace Hiz.Npoi
                 return GetRed(this.Argb);
             }
         }
+        /// <summary>
+        /// Green
+        /// </summary>
         public byte G
         {
             get
@@ -98,6 +116,9 @@ namespace Hiz.Npoi
                 return GetGreen(this.Argb);
             }
         }
+        /// <summary>
+        /// Blue
+        /// </summary>
         public byte B
         {
             get
@@ -107,6 +128,12 @@ namespace Hiz.Npoi
             }
         }
 
+        /// <summary>
+        /// 获取 十六进制 文本
+        /// </summary>
+        /// <param name="lower"></param>
+        /// <param name="alpha"></param>
+        /// <returns></returns>
         public string GetHexString(bool lower = false, bool? alpha = null)
         {
             const string FormatUpper8 = "X8";

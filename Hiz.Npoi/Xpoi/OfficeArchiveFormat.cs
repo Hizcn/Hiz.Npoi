@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hiz.Npoi
 {
-    enum OfficeArchiveFormat
+    public enum OfficeArchiveFormat
     {
         /// <summary>
         /// 未知 / 不作指定 / 按后缀名自动判断;

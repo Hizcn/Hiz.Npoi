@@ -34,5 +34,12 @@ namespace Hiz.Npoi
         public string CellStyle { get; set; }
         public string HeaderStyle { get; set; }
 
+        public string GetActualColumnHeader()
+        {
+            var header = this.HeaderText;
+            if (!string.IsNullOrEmpty(header))
+                return header;
+            return this.PropertyName;
+        }
     }
 }

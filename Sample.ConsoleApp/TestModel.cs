@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
+using NPOI.SS.UserModel;
 
 namespace Sample.ConsoleApp
 {
@@ -55,6 +56,9 @@ namespace Sample.ConsoleApp
         public ulong UInt64 { get; set; }
         public ulong? UInt64Nullable { get; set; }
 
+        [NpoiColumn(CellType = CellType.String)]
+        public ulong UInt64AsString { get; set; }
+
         public bool Boolean { get; set; }
         public bool? BooleanNullable { get; set; }
 
@@ -70,9 +74,11 @@ namespace Sample.ConsoleApp
         public TimeSpan TimeSpan { get; set; }
         public TimeSpan? TimeSpanNullable { get; set; }
 
-        //[NpoiValueAs(NPOI.SS.UserModel.CellType.Numeric)]
         public SampleEnum Enum { get; set; }
         public SampleEnum? EnumNullable { get; set; }
+
+        [NpoiColumn(CellType = CellType.Numeric)]
+        public SampleEnum EnumAsInteger { get; set; }
 
         public bool Equals(TestModel other)
         {

@@ -110,6 +110,15 @@ namespace Hiz.Npoi
                 yield return a;
             }
         }
+
+        protected override NpoiTypeDescriptor<T> InternalGetTypeAnnotation<T>(AccessorMode mode, string group)
+        {
+            var descriptor = base.InternalGetTypeAnnotation<T>(mode, group);
+
+            var type = typeof(T);
+
+            return descriptor;
+        }
     }
 
     #region System.ComponentModel.DataAnnotations

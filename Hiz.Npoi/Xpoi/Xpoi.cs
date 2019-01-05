@@ -36,9 +36,24 @@ namespace Hiz.Npoi
 
         #region 集合导出
 
-        //public virtual IWorkbook ExportMany<T>(IEnumerable<T> datas, ExcelOptions options, CancellationToken cancel = default(CancellationToken), IProgress<int> progress = null)
-        //{
-        //}
+        public static IWorkbook ExportMany<T>(IEnumerable<T> datas, RuntimeOptions options, CancellationToken cancel = default(CancellationToken), IProgress<int> progress = null)
+        {
+            if (options == null)
+                throw new ArgumentNullException();
+
+            if (options.FileFormat == OfficeArchiveFormat.None)
+            {
+                var hssf = string.Equals(Path.GetExtension(options.FilePath), ".xls", StringComparison.OrdinalIgnoreCase) ? true : false;
+
+                options.FileFormat = hssf ? OfficeArchiveFormat.Binary : OfficeArchiveFormat.OpenXml;
+            }
+
+            var service = new ExcelService();
+            var workbook = service.ExportMany<T>(datas, options, cancel, progress);
+            workbook.Write(options.FilePath);
+
+            return workbook;
+        }
 
         #endregion
     }

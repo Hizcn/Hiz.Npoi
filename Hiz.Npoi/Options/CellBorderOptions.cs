@@ -9,7 +9,7 @@ namespace Hiz.Npoi
     /// <summary>
     /// 单元格的边框配置
     /// </summary>
-    class CellBorderOptions: INamed
+    public class CellBorderOptions: INamed
     {
         #region NPOI
 

@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Hiz.Npoi.Attributes
 {
+    /// <summary>
+    /// 表格设置
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class NpoiTableAttribute : NpoiAttribute
     {

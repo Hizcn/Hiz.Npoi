@@ -84,6 +84,7 @@
     <Compile Include="Sample.cs" />
     <Compile Include="TestColor.cs" />
     <Compile Include="TestEnum.cs" />
+    <Compile Include="TestExportInport.cs" />
     <Compile Include="TestModel.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -19,7 +19,7 @@ namespace Hiz.Npoi
     /// <summary>
     /// 字体配置
     /// </summary>
-    class FontOptions : INamed
+    public class FontOptions : INamed
     {
         #region NPOI
 

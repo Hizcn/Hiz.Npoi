@@ -19,7 +19,9 @@ namespace Sample.ConsoleApp
     {
         static void Main(string[] args)
         {
-            TestEnum.Test();
+            TestExportInport.ExportMany();
+
+            //TestEnum.Test();
 
             //Sample.TestBorderTemplate();
             //Test8();

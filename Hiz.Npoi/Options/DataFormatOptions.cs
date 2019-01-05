@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hiz.Npoi
 {
-    class DataFormatOptions : INamed
+    public class DataFormatOptions : INamed
     {
         public string Name { get; set; }
 

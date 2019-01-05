@@ -6,6 +6,9 @@ using System.Text;
 
 namespace Hiz.Npoi.Attributes
 {
+    /// <summary>
+    /// 表列设置
+    /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public class NpoiColumnAttribute : NpoiAttribute
     {

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Hiz.Npoi
 {
-    class CellFillOptions : INamed
+    public class CellFillOptions : INamed
     {
         #region NPOI
 

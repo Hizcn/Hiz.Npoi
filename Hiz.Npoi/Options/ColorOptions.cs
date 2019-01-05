@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Hiz.Npoi
 {
-    class ColorOptions : INamed
+    public class ColorOptions : INamed
     {
         #region NPOI
         // short IColor.Indexed => throw new NotImplementedException();

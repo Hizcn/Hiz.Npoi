@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Hiz.Npoi
 {
-    class CellAlignmentOptions : INamed
+    public class CellAlignmentOptions : INamed
     {
         public string Name { get; set; }
 

@@ -93,7 +93,7 @@ namespace Hiz.Npoi
      * bool IsHidden { get; set; }
      */
 
-    class CellStyleOptions : INamed
+    public class CellStyleOptions : INamed
     {
         #region NPOI
 
@@ -161,26 +161,31 @@ namespace Hiz.Npoi
         /// 格式
         /// </summary>
         public string DataFormat { get; set; }
+        public bool HasDataFormat { get { return !string.IsNullOrEmpty(this.DataFormat); } }
 
         /// <summary>
         /// 对齐
         /// </summary>
         public string TextAlignment { get; set; }
+        public bool HasTextAlignment { get { return !string.IsNullOrEmpty(this.TextAlignment); } }
 
         /// <summary>
         /// 字体
         /// </summary>
         public string Font { get; set; }
+        public bool HasFont { get { return !string.IsNullOrEmpty(this.Font); } }
 
         /// <summary>
         /// 边框
         /// </summary>
         public string Border { get; set; }
+        public bool HasBorder { get { return !string.IsNullOrEmpty(this.Border); } }
 
         /// <summary>
         /// 图案
         /// </summary>
         public string Fill { get; set; }
+        public bool HasFill { get { return !string.IsNullOrEmpty(this.Fill); } }
 
         /// <summary>
         /// 是否隐藏
@@ -190,5 +195,12 @@ namespace Hiz.Npoi
         /// 是否锁定
         /// </summary>
         public bool IsLocked { get; set; } = true;
+        // public bool HasProtection
+        // {
+        //     get
+        //     {
+        //         return this.IsHidden != false || this.IsLocked != true;
+        //     }
+        // }
     }
 }

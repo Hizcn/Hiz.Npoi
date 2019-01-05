@@ -5,11 +5,8 @@ using System.Text;
 
 namespace Hiz.Npoi
 {
-    class NpoiTypeDescriptor<T>
+    class NpoiTypeDescriptor<T> : ITableOptions
     {
-
-        #region 属性
-
         IList<NpoiPropertyDescriptor<T>> _Properties = null;
         public IList<NpoiPropertyDescriptor<T>> Properties
         {
@@ -21,6 +18,11 @@ namespace Hiz.Npoi
             }
         }
 
-        #endregion
+        public float RowDefaultHeight { get; set; }
+        public float ColumnDefaultWidth { get; set; }
+        public string CellDefaultStyle { get; set; }
+        public bool HeaderVisible { get; set; } = true;
+        public float HeaderHeight { get; set; }
+        public string HeaderDefaultStyle { get; set; }
     }
 }
