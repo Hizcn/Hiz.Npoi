@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Sample.ConsoleApp
 {
-    class TestExportInport
+    class TestExportImport
     {
         public static void ExportMany()
         {

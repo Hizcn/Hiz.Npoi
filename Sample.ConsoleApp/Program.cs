@@ -19,7 +19,7 @@ namespace Sample.ConsoleApp
     {
         static void Main(string[] args)
         {
-            TestExportInport.ExportMany();
+            TestExportImport.ExportMany();
 
             //TestEnum.Test();
 
