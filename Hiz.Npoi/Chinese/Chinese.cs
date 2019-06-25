@@ -11,19 +11,25 @@ namespace Hiz.Npoi
         public static ExcelOptions GetExcelOptions()
         {
             var options = new ExcelOptions();
+
+            // 默认字体
             options.DefaultFont = new FontOptions("宋体", 10f);
 
+            // 其它字体
             options.Fonts.Add("Song10", new FontOptions("宋体", 10f));
             options.Fonts.Add("Song10b", new FontOptions("宋体", 10f) { IsBold = true });
             options.Fonts.Add("Song12b", new FontOptions("宋体", 10f) { IsBold = true });
             options.Fonts.Add("YaHei10", new FontOptions("雅黑", 10f));
+            options.Fonts.Add("YaHei10b", new FontOptions("雅黑", 10f) { IsBold = true });
 
-            options.CellStyles.Add("Title", new CellStyleOptions() { Font= "Song12b" });
+            options.CellStyles.Add("Title", new CellStyleOptions() { Font = "Song12b" });
             options.CellStyles.Add("Cell.Header", new CellStyleOptions() { Font = "Song10b" });
             options.CellStyles.Add("Cell", new CellStyleOptions() { Font = "Song10" });
             options.CellStyles.Add("Cell.Date", new CellStyleOptions() { Font = "Song10", DataFormat = "Date" });
             options.CellStyles.Add("Cell.P2", new CellStyleOptions() { Font = "Song10", DataFormat = "P2" });
             options.CellStyles.Add("Cell.C2", new CellStyleOptions() { Font = "YaHei10", DataFormat = "C2/Red/CNY" });
+
+            AddFormats(options);
 
             return options;
         }
@@ -31,7 +37,7 @@ namespace Hiz.Npoi
         // 内建格式: NPOI.SS.UserModel.BuiltinFormats;
         // 索引范围 Index: [0, 49]; 合计数量: 50;
         // [0x17-0x24] Reserved for international and undocumented.
-        static void AddFormats(ExcelOptions  options)
+        static void AddFormats(ExcelOptions options)
         {
             /* Office 2013 (*.xlsx)预设货币格式:
              * 修改内建格式:

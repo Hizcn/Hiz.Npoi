@@ -41,5 +41,11 @@ namespace Hiz.Npoi
                 return header;
             return this.PropertyName;
         }
+
+        // 是否必须属性
+        // 导入处理:
+        // 1. 如果无法找到表头, 导入直接取消.
+        // 2. 如果找到表头, 导入过程当中, 某些条目该属性没有值, 则提示给用户哪些数据缺失.
+        public bool Required { get; set; }
     }
 }

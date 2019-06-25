@@ -18,7 +18,13 @@ namespace Sample.ConsoleApp
 
     /* 动态元素 (数据)
      */
-    [NpoiTable()]
+    [NpoiTable(CellDefaultStyle = "Cell"
+        , ColumnDefaultWidth = 30
+        , HeaderDefaultStyle = "Cell.Header"
+        , HeaderHeight = 30
+        , HeaderVisible = true
+        , RowDefaultHeight = 20
+        )]
     class TestModel : IEquatable<TestModel>
     {
         public string String { get; set; }

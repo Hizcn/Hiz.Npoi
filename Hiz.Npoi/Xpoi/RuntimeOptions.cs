@@ -38,5 +38,10 @@ namespace Hiz.Npoi
                 _HasTitle = value;
             }
         }
+
+        const int DefaultReportFrequency = 10000;
+
+        // 报告频率
+        public int ReportFrequency { get; set; }
     }
 }

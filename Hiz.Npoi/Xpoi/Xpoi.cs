@@ -56,5 +56,14 @@ namespace Hiz.Npoi
         }
 
         #endregion
+
+
+        #region 集合导入
+
+        // 导入: IWorkbook => IEnumerable<T>
+        //public virtual IEnumerable<T> ImportMany<T>(IWorkbook workbook, RuntimeOptions options, CancellationToken cancel = default(CancellationToken), IProgress<int> progress = null)
+        //{
+        //}
+        #endregion
     }
 }

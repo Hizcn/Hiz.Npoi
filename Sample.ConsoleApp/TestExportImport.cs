@@ -21,7 +21,7 @@ namespace Sample.ConsoleApp
                 Title = "测试标题",
             };
 
-            var workbook = Xpoi.ExportMany<TestModel>(data, options);
+            var workbook = Xpoi.ExportMany(data, options);
             workbook.Write(options.FilePath);
         }
 

@@ -12,13 +12,15 @@ namespace Hiz.Npoi
 
     public class ExcelOptions
     {
-
         #region 引用资源
 
         // Attribute 配置使用 String Key, 应用 IWorkbook 使用 Short Index;
 
         // 颜色
         IDictionary<string, ColorOptions> _Colors;
+        /// <summary>
+        /// Key: 不区分大小写
+        /// </summary>
         public IDictionary<string, ColorOptions> Colors
         {
             get
@@ -35,6 +37,9 @@ namespace Hiz.Npoi
 
         // 格式
         IDictionary<string, string> _DataFormats;
+        /// <summary>
+        /// Key: 不区分大小写
+        /// </summary>
         public IDictionary<string, string> DataFormats
         {
             get
@@ -51,6 +56,9 @@ namespace Hiz.Npoi
 
         // 字体
         IDictionary<string, FontOptions> _Fonts;
+        /// <summary>
+        /// Key: 不区分大小写
+        /// </summary>
         public IDictionary<string, FontOptions> Fonts
         {
             get
@@ -67,6 +75,9 @@ namespace Hiz.Npoi
 
         // 填充 (xlsx 新增)
         IDictionary<string, CellFillOptions> _CellFills;
+        /// <summary>
+        /// Key: 不区分大小写
+        /// </summary>
         public IDictionary<string, CellFillOptions> CellFills
         {
             get
@@ -83,6 +94,9 @@ namespace Hiz.Npoi
 
         // 边框 (xlsx 新增)
         IDictionary<string, CellBorderOptions> _CellBorders;
+        /// <summary>
+        /// Key: 不区分大小写
+        /// </summary>
         public IDictionary<string, CellBorderOptions> CellBorders
         {
             get
@@ -98,6 +112,9 @@ namespace Hiz.Npoi
         }
 
         // 对齐 (xlsx 新增)
+        /// <summary>
+        /// Key: 不区分大小写
+        /// </summary>
         IDictionary<string, CellAlignmentOptions> _CellAlignments;
         public IDictionary<string, CellAlignmentOptions> CellAlignments
         {
@@ -115,6 +132,9 @@ namespace Hiz.Npoi
 
         // 样式
         IDictionary<string, CellStyleOptions> _CellStyles;
+        /// <summary>
+        /// Key: 不区分大小写
+        /// </summary>
         public IDictionary<string, CellStyleOptions> CellStyles
         {
             get

@@ -117,6 +117,19 @@ namespace Hiz.Npoi
 
             var type = typeof(T);
 
+            var attributes = (NpoiAttribute[])type.GetCustomAttributes(typeof(NpoiAttribute), true);
+
+            var table = attributes.OfType<NpoiTableAttribute>().FirstOrDefault();
+            if (table != null)
+            {
+                descriptor.CellDefaultStyle = table.CellDefaultStyle;
+                descriptor.ColumnDefaultWidth = table.ColumnDefaultWidth;
+                descriptor.HeaderDefaultStyle = table.HeaderDefaultStyle;
+                descriptor.HeaderHeight = table.HeaderHeight;
+                descriptor.HeaderVisible = table.HeaderVisible;
+                descriptor.RowDefaultHeight = table.RowDefaultHeight;
+            }
+
             return descriptor;
         }
     }

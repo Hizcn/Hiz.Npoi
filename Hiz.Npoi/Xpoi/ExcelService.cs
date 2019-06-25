@@ -11,12 +11,6 @@ namespace Hiz.Npoi
 {
     class ExcelService
     {
-        // 默认报告频率
-        const int DefaultReportFrequency = 10000;
-
-        // 报告频率
-        int _ReportFrequency = DefaultReportFrequency;
-
         AnnotationProvider _AnnotationService = new NpoiAnnotationProvider();
 
         #region 集合导出
@@ -25,7 +19,7 @@ namespace Hiz.Npoi
         public virtual IWorkbook ExportMany<T>(IEnumerable<T> datas, RuntimeOptions options, CancellationToken cancel = default(CancellationToken), IProgress<int> progress = null)
         {
             if (datas == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(); 
 
             // 获取数据注解;
             var descriptor = _AnnotationService.GetExport<T>();
@@ -70,7 +64,7 @@ namespace Hiz.Npoi
             {
                 if (sheet == null)
                 {
-                    sheet = CreateSheet<T>(workbook, options, annotations);
+                    sheet = CreateSheet<T>(workbook, options, descriptor);
                     r = sheet.LastRowNum;
                     r++;
 
@@ -117,7 +111,7 @@ namespace Hiz.Npoi
                     //    CreateGridFooter(sheet, r);
                     //}
 
-                    EndOfSheet(sheet, annotations, gridRowFirst, r - gridRowFirst);
+                    EndOfSheet(sheet, descriptor, gridRowFirst, r - gridRowFirst);
                     sheet = null;
                     r = 0;
                 }
@@ -129,17 +123,19 @@ namespace Hiz.Npoi
                 //    CreateGridFooter(sheet, r);
                 //}
 
-                EndOfSheet(sheet, annotations, gridRowFirst, r - gridRowFirst);
+                EndOfSheet(sheet, descriptor, gridRowFirst, r - gridRowFirst);
             }
 
             return workbook;
         }
 
         // 创建表单
-        ISheet CreateSheet<T>(IWorkbook workbook, RuntimeOptions options, IList<NpoiPropertyDescriptor<T>> annotations)
+        ISheet CreateSheet<T>(IWorkbook workbook, RuntimeOptions options, NpoiTypeDescriptor<T> descriptor)
         {
             ISheet sheet = workbook.CreateSheet();
             var r = 0; // 当前表单 行的索引
+
+            var annotations = descriptor.Properties;
 
             // 创建表单标题
             if (options.HasTitle)
@@ -195,7 +191,7 @@ namespace Hiz.Npoi
         }
 
         // 完结表单
-        void EndOfSheet<T>(ISheet sheet, IList<NpoiPropertyDescriptor<T>> annotations, int gridRowFirst, int gridRowCount)
+        void EndOfSheet<T>(ISheet sheet, NpoiTypeDescriptor<T> descriptor, int gridRowFirst, int gridRowCount)
         {
             // 自动大小表列
             //for (var i = 0; i < annotations.Count; i++)
@@ -205,6 +201,161 @@ namespace Hiz.Npoi
             //}
         }
 
+        #endregion
+
+        #region 集合导入
+
+        // 导入: IWorkbook => IEnumerable<T>
+        public virtual IEnumerable<T> ImportMany<T>(IWorkbook workbook, ExcelOptions options, CancellationToken cancel = default(CancellationToken), IProgress<int> progress = null) where T : new()
+        {
+            //IWorkbook workbook;
+            //using (var stream = File.OpenRead(path))
+            //{
+            //    workbook = WorkbookFactory.Create(stream);
+            //}
+
+            cancel.ThrowIfCancellationRequested();
+
+            // 获取数据注解;
+            var root = _AnnotationService.GetImport<T>();
+
+            // 导入错误信息
+            var errors = new List<ExcelCellError>();
+
+            var k = 0;
+            var p = 0;
+            for (int s = 0; s < workbook.NumberOfSheets; s++)
+            {
+                // 当前表单;
+                var sheet = workbook.GetSheetAt(s);
+
+                var r = 0; // 当前行的索引;
+
+                IList<NpoiPropertyDescriptor<T>> annotations = null;
+                if (root.HeaderVisible)
+                {
+                    var headers = LoadGridHeaders(sheet, r++);
+
+                    IList<string> requires;
+                    IList<string> optionals;
+                    IList<string> surpluses;
+                    annotations = root.TryCheckGridHeader(headers, out requires, out optionals, out surpluses);
+
+                    if (requires.Count > 0)
+                    {
+                        var message = new StringBuilder();
+                        message.AppendLine("缺少以下字段: ");
+                        foreach (var q in requires)
+                        {
+                            message.AppendLine(q);
+                        }
+
+                        errors.Add(new ExcelCellError()
+                        {
+                            SheetIndex = s,
+                            SheetName = sheet.SheetName,
+                            ErrorMessage = message.ToString(),
+                        });
+
+                        continue; // 下一表单;
+                    }
+
+                    annotations = root.MakeArrayWithOrder(annotations).ToList();
+                }
+                else
+                {
+                    annotations = root.Properties;
+                }
+
+                var first = r;
+                var last = sheet.LastRowNum;
+                var count = annotations.Count;
+                var cells = new ICell[count];
+
+                while (r <= last)
+                {
+                    var row = sheet.GetRow(r);
+                    if (row != null)
+                    {
+                        // 一次性获取当前行的所有单元格.
+                        for (var i = 0; i < count; i++)
+                            cells[i] = row.GetCell(i, MissingCellPolicy.RETURN_NULL_AND_BLANK);
+
+                        if (cells.Any(c => c != null))
+                        {
+                            var data = Activator.CreateInstance<T>(); // 创建实例
+
+                            var had = 0; // 有值数量
+                            var missed = 0; // 必需字段缺少数量
+                            for (var c = 0; c < count; c++)
+                            {
+                                var t = annotations[c];
+
+                                var cell = cells[c];
+                                object value = null;
+                                if (cell != null)
+                                {
+                                    try
+                                    {
+                                        value = cell.GetCellValue(t.PropertyType);
+                                    }
+                                    catch (Exception exception)
+                                    {
+                                        errors.Add(new ExcelCellError()
+                                        {
+                                            SheetIndex = s,
+                                            RowIndex = r,
+                                            ColumnIndex = c,
+                                            ErrorMessage = exception.Message,
+                                        });
+                                    }
+                                }
+
+                                if (value != null)
+                                {
+                                    t.Setter(data, value);
+                                    had++;
+                                }
+                                else if (t.Required)
+                                {
+                                    missed++;
+                                    errors.Add(new ExcelCellError()
+                                    {
+                                        SheetIndex = s,
+                                        RowIndex = r,
+                                        ColumnIndex = c,
+                                        ErrorMessage = "缺少必需字段",
+                                    });
+                                }
+                            }
+
+                            // 只要没有缺失任何必需字段, 并且至少有一个单元格有值, 那就输出;
+                            if (missed == 0 && had > 0)
+                                yield return data;
+
+                            //k++;
+                            //if (++p == 10000) // 求余性能较差
+                            //{
+                            //    // 每一万条检测一次取消指令, 以及报告进度一次...
+                            //    cancel.ThrowIfCancellationRequested();
+                            //    if (progress != null)
+                            //        progress.Report(k);
+                            //    p = 0;
+                            //}
+                        }
+                    }
+                    r++;
+                }
+            }
+        }
+        // 读取表头
+        KeyValuePair<int, string>[] LoadGridHeaders(ISheet sheet, int rowIndex)
+        {
+            var row = sheet.GetRow(rowIndex);
+            if (row != null)
+                return row.GetCells().Select(c => new KeyValuePair<int, string>(c.ColumnIndex, c.GetCellValue<string>())).ToArray();
+            return null;
+        }
         #endregion
     }
 }
